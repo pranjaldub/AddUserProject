@@ -1,4 +1,5 @@
 import React from "react";
+import Card from "../components/UI/Card";
 import InputUserForm from "./InputUserForm";
 const InputUser = (parentProp) => {
   const pass = (props) => {
@@ -9,7 +10,9 @@ const InputUser = (parentProp) => {
 
   return (
     <div>
-      <InputUserForm disp={pass}></InputUserForm>
+      <Card>
+        <InputUserForm disp={pass}></InputUserForm>
+      </Card>
     </div>
   );
 };

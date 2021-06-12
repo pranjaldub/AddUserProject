@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-
+import SimpleModal from "./Modal";
+import "./InputUserForm.css";
+import { cyan } from "@material-ui/core/colors";
 const InputUserForm = (props) => {
   //states to manage validation for input name and age
   const [isValidAge, ValidateAge] = useState(true);
@@ -9,7 +11,7 @@ const InputUserForm = (props) => {
   const [InputName, setInputName] = useState("");
 
   //state to handle input age
-  const [InputAge, setInputAge] = useState("");
+  const [InputAge, setInputAge] = useState(-1);
 
   //function to handle input name
   const NameHandler = (event) => {
@@ -23,26 +25,11 @@ const InputUserForm = (props) => {
   //function to handle the age input
   const AgeHandler = (event) => {
     event.preventDefault();
-    if (event.target.value > 0 && event.target.value < 100) {
+    if (event.target.value > 0) {
       setInputAge(event.target.value);
       ValidateAge(true);
     }
   };
-
-  //function to submi details and pass to the parent function
-  const submit = (event) => {
-    event.preventDefault();
-    if (InputName.trim() !== "" && InputAge > 0 && InputAge < 100) {
-      props.disp({ name: InputName, age: InputAge });
-      setInputAge("");
-      setInputName("");
-    } else {
-      console.log("not a valid age or name");
-      ValidateAge(false);
-      ValidateName(false);
-    }
-  };
-
   //reset age warnings
   const resetAge = () => {
     ValidateAge(true);
@@ -51,18 +38,37 @@ const InputUserForm = (props) => {
   const resetName = () => {
     ValidateName(true);
   };
+
+  //function to submi details and pass to the parent function
+  const submit = (event) => {
+    event.preventDefault();
+    console.log("inside submit", InputAge, InputName);
+    if (InputName.trim() !== "" && InputAge > 0 && InputAge < 100) {
+      props.disp({ name: InputName, age: InputAge });
+      setInputAge("");
+      setInputName("");
+    } else {
+      console.log("not a valid age or name");
+      if (InputName.trim() === "") {
+        ValidateName(false);
+      }
+      if (InputAge < 0 || InputAge > 100) {
+        ValidateAge(false);
+      }
+    }
+  };
+
   return (
-    <div>
-      <form onSubmit={submit}>
+    <div className="background">
+      <form>
         <div>
           <label>UserName</label>
           <input
             type="text"
             placeholder="Sam"
             onChange={NameHandler}
-            onClick={resetName}
+            className="box"
           ></input>
-          {!isValidName && <p>Please enter a name</p>}
         </div>
         <div>
           <label>Age(Years)</label>
@@ -70,12 +76,25 @@ const InputUserForm = (props) => {
             type="number"
             placeholder="23"
             onChange={AgeHandler}
-            onClick={resetAge}
+            className="box"
           ></input>
-          {!isValidAge && <p>Please enter a valid age</p>}
         </div>
-        <div>
-          <button>Add User</button>
+        <div style={{ alignItems: "center", alignSelf: "center" }}>
+          <button
+            onClick={submit}
+            style={{
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }}
+          >
+            Add User
+          </button>
+          {!isValidName && (
+            <SimpleModal show={true}>not a valid name</SimpleModal>
+          )}
+          {!isValidAge && (
+            <SimpleModal show={true}>not a valid age</SimpleModal>
+          )}
         </div>
       </form>
     </div>

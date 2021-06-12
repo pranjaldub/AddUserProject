@@ -3,8 +3,10 @@ import React from "react";
 const User = (props) => {
   return (
     <div>
-      <div>Name : {props.name}</div>
-      <div>Age : {props.age}</div>
+      <div style={{ display: "inline", margin: "20px" }}>
+        Name : {props.name}
+      </div>
+      <div style={{ display: "inline", margin: "20px" }}>Age : {props.age}</div>
     </div>
   );
 };
